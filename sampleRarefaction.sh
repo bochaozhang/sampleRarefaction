@@ -62,8 +62,10 @@ for feat in ${unique_features}; do
 	sample_id=${sample_id::-1}
 	
 	# Get number of samples in each clone
-	map=$(mysql --defaults-extra-file=security.cnf -h clash.biomed.drexel.edu --database=$db_name -N -B -e "select count(distinct sample_id) from sequences where sample_id in ($sample_id) and functional=1 and clone_id in ($qualified_clones) group by clone_id")
+	echo "select count(distinct sample_id) from sequences where sample_id in ($sample_id) and functional=1 and clone_id in ($qualified_clones) group by clone_id" > temp.txt
+	map=$(mysql --defaults-extra-file=security.cnf -h clash.biomed.drexel.edu --database=$db_name -N -B < temp.txt)
 	map=($map)
+	rm temp.txt
 
 	# Get richness
 	richness=${#map[@]}	
