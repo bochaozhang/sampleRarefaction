@@ -18,7 +18,7 @@ For example
 ```
 bash sampleRarefaction.sh -d lp11 -s D207 -f tissue -t 20
 ```
-will calculate the number of additional sample needed to reach 0.5:0.01:0.95 coverage for each tissue in subject D207 from database lp11, using only clones that have at least 20 instances in at least one tissue
+will calculate the number of additional sample needed to reach 0.5:0.01:0.95 coverage for each tissue in subject D207 from database lp11, using only clones that have at least 20 instances in at least one tissue.
 
 ** Note: you will need permission to access databases, replace your username and pwd in security.cnf. **
 
@@ -29,12 +29,22 @@ We considered clone size to be the sum of the number of uniquely mutated sequenc
 ### Lower bound clone size
 Our assumption is clones with larger size are easier to sample. So number of additional sample is calculated based on lower bound clone size. This lower bound clone size is defined as at least *X* instances in at least compartment. And they are generally referred to as C*X* clones, where *X* denotes the lower bound clone size.
 
+When 'feature' is set to 'none':
+```
+-f none
+```
+, then the C*X* clones are selected without feature. ie. C*X* clones means at least instances combining all compartments.
+
+
+
 ### Calculation
 [Models and estimators linking individual-based and sample-based rarefaction, extrapolation and comparison of assemblages](https://academic.oup.com/jpe/article/5/1/3/1296712/Models-and-estimators-linking-individual-based-and)
 
 ## Output files
-The code will output one tsv file for each compartment with feature with prefix:
+The code will output two tsv files for each compartment with feature as prefix:
 [subject]-[compartment]-[C*X*]-
 in which *X* denotes the lower bound clone size:
 
 **addtionalSamples.tsv**: contains the number of additional samples needed to achieve 0.5 to 0.95 coverage, with step of 0.01. Numbers are rounded to the nearest integar towards positive infinity.
+
+**clones.tsv**: contains the IDs of clones that qualified  and are being used in calculation.
